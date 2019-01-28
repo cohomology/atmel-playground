@@ -5,10 +5,10 @@ blinkyLED.hex: blinkyLED.elf
 	avr-objcopy -j .text -j .data -O ihex $< $@
 
 blinkyLED.elf: blinkyLED.o
-	avr-gcc -o $@ -DF_CPU=1200000 -mmcu=attiny13 $< 
+	avr-gcc -g -o $@ -DF_CPU=1200000 -mmcu=attiny13 $< 
 
 blinkyLED.o: blinkyLED.S
-	avr-gcc -DF_CPU=1200000 -mmcu=attiny13 $< -c -o $@
+	avr-gcc -g -DF_CPU=1200000 -mmcu=attiny13 $< -c -o $@
 
 .phony: clean
 clean:
