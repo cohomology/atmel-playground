@@ -30,10 +30,10 @@ button_state:      .byte 1
 .global TIM0_COMPA_vect 
 .type TIM0_COMPA_vect, @function
 TIM0_COMPA_vect:
-  in   r23, _PINB_
+  in   r23, _PINB_                                        
   andi r23, ( 1 << BUTTON_PIN )
   lds  r24, prev_button_state
-  sts prev_button_state, r23
+  sts  prev_button_state, r23
   cp   r23, r24                                             ; if ( TCCR0B & ( 1 << BUTTON_PIN ) ) != prev_button_state
   brne button_changed                                       ;   goto button_changed
 check_blink:

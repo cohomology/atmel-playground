@@ -16,7 +16,7 @@ clean:
 
 .phony: upload
 upload: blinkyLED.hex
-	avrdude -p attiny13 -b 19200 -c stk500v1 -P /dev/ttyACM0 -U flash:w:$<
+	avrdude -p attiny13 -b 19200 -c stk500v1 -P /dev/ttyACM0 -U lfuse:w:0x2A:m -U hfuse:w:0xF9:m -U lock:w:0xFF:m -U flash:w:$<
 
 .phony: show-fuses
 show-fuses: 
