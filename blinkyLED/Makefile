@@ -8,7 +8,7 @@ blinkyLED.elf: blinkyLED.o
 	avr-gcc -g -o $@ -DF_CPU=1200000 -mmcu=attiny13 $< 
 
 blinkyLED.o: blinkyLED.S
-	avr-gcc -g -DF_CPU=1200000 -mmcu=attiny13 $< -c -o $@
+	avr-gcc -g -O3 -DF_CPU=1200000 -mmcu=attiny13 $< -c -o $@
 
 .phony: clean
 clean:

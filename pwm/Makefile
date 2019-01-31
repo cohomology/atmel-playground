@@ -7,12 +7,13 @@ pwm.hex: pwm.elf
 pwm.elf: pwm.o
 	avr-gcc -g -o $@ -DF_CPU=9600000 -mmcu=attiny13 $< 
 
-pwm.o: pwm.c
-	avr-g++ -std=c++14 -Os -g -DF_CPU=9600000 -mmcu=attiny13 $< -c -o $@
+pwm.o: pwm.cxx
+	avr-g++ -std=c++14 -O3 -g -DF_CPU=9600000 -mmcu=attiny13 $< -S -o $@.S 
+	avr-g++ -std=c++14 -O3 -g -DF_CPU=9600000 -mmcu=attiny13 $< -c -o $@
 
 .phony: clean
 clean:
-	rm -f *.elf *.hex *.o a.out
+	rm -f *.elf *.hex *.o a.out *.S
 
 .phony: upload
 upload: pwm.hex
