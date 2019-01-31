@@ -1,3 +1,13 @@
+/* by Kilian Kilger, 2019; released in the public domain */
+
+/* Simple example of a motor, LED and a button. The motor is 
+ * driven by PWM and increased in speed if the button is pressed.
+ * The LED blinks faster the faster the motor is driving. 
+ *
+ * In this example, the LED is on PB3, the button on PB4 and the 
+ * motor on PB0. We use some poor man's debouncing for the button.
+ */
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/atomic.h>
@@ -20,20 +30,19 @@ public:
 
   void setup() volatile
   {
-    cli();          // disable interrupts
+    cli();
     pinSetup();
     pwmSetup();
-    sei();          // enable interrupts
+    sei();
   } 
 
   void timerInterrupt() volatile
   {
-    ++m_counter;
-    if ((m_counter % 2048) == 0)
+    uint32_t counter = 0;
+    increaseCounter(counter);
+    if ((counter % 1024) == 0)
       handleButton();
-    lightLED();
-    if (m_counter == 19200000)
-      m_counter = 0;     
+    lightLED(counter);
   }
 
 private:
@@ -82,13 +91,25 @@ private:
     m_ledOn ? switchLedOff() : switchLedOn();
   } 
 
-  void lightLED() volatile
+  void lightLED(uint32_t& counter) volatile
   {
     if (m_motorState == 0)
       switchLedOff();
-    else if ((m_counter % (32768 / m_motorState)) == 0) 
+    else if ((counter % (32768 / m_motorState)) == 0) 
       toggleLed();
   }         
+
+  void increaseCounter(uint32_t& counter) volatile
+  {
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+      counter = m_counter; 
+      if (m_counter == 19200000)
+        m_counter = 0; 
+      else
+        ++m_counter;
+    }
+  }
 
 private:
   const uint8_t ledPin = PB3;
