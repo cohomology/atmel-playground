@@ -8,8 +8,8 @@ pwm.elf: pwm.o
 	avr-gcc -g -o $@ -DF_CPU=9600000 -mmcu=attiny13 $< 
 
 pwm.o: pwm.cxx
-	avr-g++ -std=c++14 -O3 -g -DF_CPU=9600000 -mmcu=attiny13 $< -S -o $@.S 
-	avr-g++ -std=c++14 -O3 -g -DF_CPU=9600000 -mmcu=attiny13 $< -c -o $@
+	avr-g++ -std=c++14 -Os -g -DF_CPU=9600000 -mmcu=attiny13 $< -S -o $@.S 
+	avr-g++ -std=c++14 -Os -g -DF_CPU=9600000 -mmcu=attiny13 $< -c -o $@
 
 .phony: clean
 clean:

@@ -28,10 +28,12 @@ public:
 
   void timerInterrupt() volatile
   {
-    uint32_t counter = increaseCounter();
-    if ((counter % 2048) == 0)
+    ++m_counter;
+    if ((m_counter % 2048) == 0)
       handleButton();
-    lightLED(counter);
+    lightLED();
+    if (m_counter == 19200000)
+      m_counter = 0;     
   }
 
 private:
@@ -80,25 +82,13 @@ private:
     m_ledOn ? switchLedOff() : switchLedOn();
   } 
 
-  void lightLED(uint32_t counter) volatile
+  void lightLED() volatile
   {
     if (m_motorState == 0)
       switchLedOff();
-    else if ((counter % (32768 / m_motorState)) == 0) 
+    else if ((m_counter % (32768 / m_motorState)) == 0) 
       toggleLed();
   }         
-
-  uint32_t increaseCounter() volatile
-  {
-    uint32_t result;
-    ATOMIC_BLOCK(ATOMIC_FORCEON)
-    {
-      result = m_counter++;
-      if (m_counter == 19200000)
-        m_counter = 0;    
-    }
-    return result;
-  }
 
 private:
   const uint8_t ledPin = PB3;
